@@ -1,0 +1,6 @@
+downloads/
+ipod_ready/
+logs/
+*.log
+.env
+state.json
