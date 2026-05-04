@@ -6,30 +6,23 @@ import shutil
 import re
 import requests
 from datetime import datetime
+from dotenv import load_dotenv
 
 # --- CONFIGURATION ---
-PLAYLIST_URL = "https://music.youtube.com/playlist?list=PLsLnUuEiM597QsUDH-L-waW5NE5sM3bFk"
-IPOD_IP = "192.168.10.34"
-IPOD_USER = "root"
-IPOD_MUSIC_PATH = "/var/mobile/Media/Music_Sync"
-BASE_DIR = os.path.expanduser("~/music_sync")
+load_dotenv()
+
+PLAYLIST_URL = os.getenv("PLAYLIST_URL", "https://music.youtube.com/playlist?list=PLsLnUuEiM597QsUDH-L-waW5NE5sM3bFk")
+IPOD_IP = os.getenv("IPOD_IP", "192.168.10.34")
+IPOD_USER = os.getenv("IPOD_USER", "root")
+IPOD_MUSIC_PATH = os.getenv("IPOD_MUSIC_PATH", "/var/mobile/Media/Music_Sync")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DOWNLOAD_DIR = os.path.join(BASE_DIR, "downloads")
 READY_DIR = os.path.join(BASE_DIR, "ipod_ready")
 STATE_FILE = os.path.join(BASE_DIR, "state.json")
 LOG_FILE = os.path.join(BASE_DIR, "logs/sync.log")
-ENV_FILE = os.path.join(BASE_DIR, ".env")
 
-# --- LOAD ENV ---
-def get_env(key):
-    if os.path.exists(ENV_FILE):
-        with open(ENV_FILE, 'r') as f:
-            for line in f:
-                if line.startswith(f"{key}="):
-                    return line.split('=', 1)[1].strip()
-    return None
-
-BOT_TOKEN = get_env("TELEGRAM_BOT_TOKEN")
-ADMIN_ID = get_env("TELEGRAM_ADMIN_ID")
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+ADMIN_ID = os.getenv("TELEGRAM_ADMIN_ID")
 
 # --- LOGGING ---
 os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
